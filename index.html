@@ -110,7 +110,7 @@
         }
 
         // Fungsi Beep Tunggal
-        function beep(freq = 800, duration = 0.3) {
+        function beep(freq = 800, duration = 1000) {
             initAudio();
             let osc = audioCtx.createOscillator();
             let gain = audioCtx.createGain();
@@ -132,7 +132,7 @@
                 if (count >= durationSeconds) { // Berhenti setelah jumlah detik tercapai
                     clearInterval(buzzerInterval);
                 }
-            }, 1000); // Bunyi bip setiap 1 detik
+            }, 2000); // Bunyi bip setiap 1 detik
         }
 
         function updateClock() {
@@ -209,3 +209,4 @@
     </script>
 </body>
 </html>
+
