@@ -100,33 +100,39 @@
         let jadwalGlobal = {};
         let isIqomah = false;
         let audioCtx = null;
+        let buzzerInterval = null;
 
-        // Inisialisasi Audio Context
         function initAudio() {
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
+            if (audioCtx.state === 'suspended') { audioCtx.resume(); }
         }
 
-        function playBuzzer(count) {
+        // Fungsi Beep Tunggal
+        function beep(freq = 800, duration = 0.3) {
             initAudio();
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
-            
-            for (let i = 0; i < count; i++) {
-                setTimeout(() => {
-                    let osc = audioCtx.createOscillator();
-                    let gain = audioCtx.createGain();
-                    osc.type = "square";
-                    osc.frequency.setValueAtTime(900, audioCtx.currentTime);
-                    osc.connect(gain);
-                    gain.connect(audioCtx.destination);
-                    osc.start();
-                    gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.6);
-                    osc.stop(audioCtx.currentTime + 0.6);
-                }, i * 800);
-            }
+            let osc = audioCtx.createOscillator();
+            let gain = audioCtx.createGain();
+            osc.type = "square";
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + duration);
+            osc.stop(audioCtx.currentTime + duration);
+        }
+
+        // Fungsi Buzzer Durasi Panjang (1 Menit)
+        function startLongBuzzer(durationSeconds) {
+            let count = 0;
+            buzzerInterval = setInterval(() => {
+                beep(900, 0.4);
+                count++;
+                if (count >= durationSeconds) { // Berhenti setelah jumlah detik tercapai
+                    clearInterval(buzzerInterval);
+                }
+            }, 1000); // Bunyi bip setiap 1 detik
         }
 
         function updateClock() {
@@ -140,7 +146,7 @@
             const daftarSholat = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
             daftarSholat.forEach(sholat => {
                 if (jadwalGlobal[sholat] === jamMenit && !isIqomah) {
-                    playBuzzer(3); 
+                    startLongBuzzer(60); // Bunyi selama 60 detik (1 menit)
                     mulaiIqomah(sholat);
                 }
             });
@@ -164,7 +170,7 @@
 
         function mulaiIqomah(namaSholat) {
             isIqomah = true;
-            let durasi = 15 * 60;
+            let durasi = 15 * 60; // 15 Menit Total
             const overlay = document.getElementById('layar-iqomah');
             const display = document.getElementById('countdown');
             const teks = document.getElementById('teks-sholat');
@@ -177,7 +183,12 @@
                 let s = durasi % 60;
                 display.innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
 
-                if (durasi === 10) { playBuzzer(3); } // Buzzer 10 detik terakhir
+                // Buzzer 3x saat tinggal 10 detik terakhir iqomah
+                if (durasi === 10) { 
+                    for(let i=0; i<3; i++) {
+                        setTimeout(() => beep(1000, 0.5), i * 700);
+                    }
+                }
 
                 if (durasi <= 0) {
                     clearInterval(timer);
@@ -187,13 +198,12 @@
             }, 1000);
         }
 
-        // Trik: Coba aktifkan audio setiap kali user berinteraksi atau saat jadwal dimuat
         window.addEventListener('load', () => {
             getJadwalSholat();
             setInterval(updateClock, 1000);
         });
 
-        // Klik paksa satu kali di awal oleh pengurus masjid sangat disarankan
+        // Interaksi pertama kali agar suara aktif di TV
         window.addEventListener('mousedown', initAudio);
         window.addEventListener('touchstart', initAudio);
     </script>
