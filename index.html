@@ -12,11 +12,10 @@
             background-image: linear-gradient(rgba(0,0,0,0.1), rgba(0,0,0,0.1)), url('bg-masjid.jpg');
             background-size: cover; background-position: center; color: white;
             display: flex; flex-direction: column; overflow: hidden;
-            /* Memberikan ruang aman di sekeliling layar TV */
             padding: 20px 40px; 
         }
 
-        /* 1. HEADER TENGAH ATAS */
+        /* HEADER */
         .header-center {
             text-align: center;
             background: rgba(0, 0, 0, 0.7);
@@ -25,92 +24,48 @@
             margin-bottom: 15px;
             border: 1px solid rgba(255, 215, 0, 0.4);
         }
-        .header-center h1 {
-            font-size: 3.5rem; /* Ukuran disesuaikan agar tidak terlalu memakan tempat */
-            color: #ffd700;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-        }
+        .header-center h1 { font-size: 3.5rem; color: #ffd700; text-shadow: 2px 2px 4px rgba(0,0,0,0.8); }
         .header-center p { font-size: 1.2rem; color: #fff; }
 
         .main-content {
-            flex: 1;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 30px;
-            min-height: 0; /* Penting agar kontainer bisa mengecil */
+            flex: 1; display: flex; justify-content: space-between; align-items: center; gap: 30px; min-height: 0;
         }
 
-        /* 2. KAS & PETUGAS (KIRI) */
-        .sidebar-left {
-            width: 40%;
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        .card {
-            background: rgba(0, 0, 0, 0.75);
-            border-radius: 12px;
-            border: 2px solid #2e7d32;
-            overflow: hidden;
-        }
-        .card-header {
-            background: #2e7d32;
-            padding: 8px;
-            text-align: center;
-            font-weight: bold;
-            font-size: 1.6rem;
-            color: #ffd700;
-        }
+        /* KAS & PETUGAS */
+        .sidebar-left { width: 40%; display: flex; flex-direction: column; gap: 15px; }
+        .card { background: rgba(0, 0, 0, 0.75); border-radius: 12px; border: 2px solid #2e7d32; overflow: hidden; }
+        .card-header { background: #2e7d32; padding: 8px; text-align: center; font-weight: bold; font-size: 1.6rem; color: #ffd700; }
         .card-body { padding: 15px; }
         .row { display: flex; justify-content: space-between; margin-bottom: 8px; font-size: 1.5rem; }
         .total { border-top: 2px solid #ffd700; padding-top: 8px; color: #ffd700; font-weight: bold; font-size: 1.7rem; }
 
-        /* 5. JAM (KANAN) */
-        .clock-section {
-            background: rgba(0, 0, 0, 0.75);
-            padding: 30px;
-            border-radius: 20px;
-            text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            width: 55%;
-        }
-        #jam {
-            font-size: 8rem; /* Sedikit dikecilkan agar jadwal sholat bisa naik */
-            font-weight: bold;
-            color: white;
-            line-height: 1;
-        }
+        /* JAM */
+        .clock-section { background: rgba(0, 0, 0, 0.75); padding: 30px; border-radius: 20px; text-align: center; border: 1px solid rgba(255, 255, 255, 0.2); width: 55%; }
+        #jam { font-size: 8rem; font-weight: bold; color: white; line-height: 1; }
         #tanggal-masehi { font-size: 1.8rem; color: #ffd700; margin-top: 10px; }
         #tanggal-hijriah { font-size: 1.8rem; color: #00ff00; font-weight: bold; }
 
-        /* 3. JADWAL SHOLAT (BAWAH) - SEKARANG HARUS KELIHATAN */
-        .footer-jadwal {
-            background: rgba(0, 0, 0, 0.85);
-            display: grid;
-            grid-template-columns: repeat(6, 1fr);
-            padding: 10px 0;
-            border-top: 4px solid #ffd700;
-            margin-top: 15px;
-            border-radius: 10px;
-        }
+        /* JADWAL SHOLAT */
+        .footer-jadwal { background: rgba(0, 0, 0, 0.85); display: grid; grid-template-columns: repeat(6, 1fr); padding: 10px 0; border-top: 4px solid #ffd700; margin-top: 15px; border-radius: 10px; }
         .sholat-item { text-align: center; border-right: 1px solid rgba(255,255,255,0.1); }
         .sholat-name { font-size: 1.4rem; color: #ffd700; font-weight: bold; }
         .sholat-time { font-size: 2.8rem; font-weight: bold; display: block; }
 
-        /* 4. RUNNING TEXT */
-        .running-text {
-            background: #2e7d32;
-            padding: 8px 0;
-            font-size: 1.5rem;
-            margin-top: 10px;
-        }
+        .running-text { background: #2e7d32; padding: 8px 0; font-size: 1.5rem; margin-top: 10px; }
 
+        /* PERBAIKAN LAYAR IQOMAH: Background Masjid + Nama Waktu */
         #layar-iqomah {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: #000; z-index: 10000; display: none;
+            background-image: linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url('bg-masjid.jpg');
+            background-size: cover; background-position: center;
+            z-index: 10000; display: none;
             flex-direction: column; align-items: center; justify-content: center;
+            text-align: center;
         }
+        #iqomah-sholat-name { font-size: 4rem; color: #ffd700; text-transform: uppercase; font-weight: bold; margin-bottom: 10px; }
+        #iqomah-title { font-size: 8rem; color: white; font-weight: bold; letter-spacing: 5px; }
+        #countdown { font-size: 15rem; color: #ffd700; font-weight: bold; line-height: 1; margin: 20px 0; }
+        #iqomah-msg { font-size: 2.5rem; color: white; }
     </style>
 </head>
 <body>
@@ -141,8 +96,8 @@
 
         <div class="clock-section">
             <div id="jam">00:00:00</div>
-            <div id="tanggal-masehi">Senin, 2 Maret 2026</div>
-            <div id="tanggal-hijriah">13 Ramadhan 1447 H</div>
+            <div id="tanggal-masehi">--</div>
+            <div id="tanggal-hijriah">--</div>
         </div>
     </div>
 
@@ -160,8 +115,10 @@
     </div>
 
     <div id="layar-iqomah">
-        <h1 style="font-size: 8rem; color: white;">IQOMAH</h1>
-        <div id="countdown" style="font-size: 15rem; color: #ffd700; font-weight: bold;">15:00</div>
+        <div id="iqomah-sholat-name">WAKTU SHOLAT</div>
+        <div id="iqomah-title">IQOMAH</div>
+        <div id="countdown">15:00</div>
+        <div id="iqomah-msg">Luruskan Shaf & Matikan HP</div>
     </div>
 
     <script>
@@ -180,12 +137,13 @@
                     `${jadwalGlobal.date.hijri.day} ${jadwalGlobal.date.hijri.month.en} ${jadwalGlobal.date.hijri.year} H`;
             }
 
-            const daftarSholat = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
-            daftarSholat.forEach(sholat => {
-                if (jadwalGlobal.timings && jadwalGlobal.timings[sholat] === jamMenit && !isIqomah) {
-                    mulaiIqomah(sholat);
+            const daftarSholat = { 'Fajr': 'SUBUH', 'Dhuhr': 'DZUHUR', 'Asr': 'ASHAR', 'Maghrib': 'MAGHRIB', 'Isha': 'ISYA' };
+            for (const [key, nama] of Object.entries(daftarSholat)) {
+                if (jadwalGlobal.timings && jadwalGlobal.timings[key] === jamMenit && !isIqomah) {
+                    mulaiIqomah(nama);
+                    break;
                 }
-            });
+            }
         }
 
         async function getJadwalSholat() {
@@ -206,12 +164,16 @@
             } catch (err) { console.log("Gagal muat jadwal"); }
         }
 
-        function mulaiIqomah(sholat) {
+        function mulaiIqomah(namaSholat) {
             isIqomah = true;
-            let durasi = 15 * 60;
+            let durasi = 15 * 60; // 15 menit
             const overlay = document.getElementById('layar-iqomah');
             const display = document.getElementById('countdown');
+            const sholatText = document.getElementById('iqomah-sholat-name');
+            
+            sholatText.innerText = "WAKTU " + namaSholat;
             overlay.style.display = 'flex';
+
             const timer = setInterval(() => {
                 durasi--;
                 let m = Math.floor(durasi / 60); let s = durasi % 60;
