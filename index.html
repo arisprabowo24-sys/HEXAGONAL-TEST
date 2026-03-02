@@ -1,216 +1,233 @@
 <!DOCTYPE html>
-<html>
+<html lang="id">
 <head>
-<meta charset="UTF-8">
-<title>Jam Digital + Waktu Sholat</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jadwal Shalat Masjid Darussalam</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Arial', sans-serif;
+        }
 
-<style>
-    body {
-        margin: 0;
-        background: black;
-        color: #00e5ff;
-        font-family: Arial, Helvetica, sans-serif;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        text-align: center;
-    }
-#title {
-    font-size: 8vw;
-    font-weight: bold;
-    margin-bottom: 10px;
-}
-    #clock {
-        font-size: 20vw;
-        font-weight: bold;
-        margin-bottom: 20px;
-    }
+        body {
+            height: 100vh;
+            background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('JAM MASJID/bg-masjid.jpg');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
 
+        /* HEADER */
+        header {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 4px solid #ffd700;
+        }
 
-    #prayer-box {
-        display: flex;
-        gap: 4vw;
-        font-size: 4vw;
-        margin-top: 10px;
-    }
+        .masjid-info h1 {
+            font-size: 2.5rem;
+            color: #ffd700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
 
-    .item {
-        text-align: center;
-    }
+        .clock-container {
+            text-align: right;
+        }
 
-    .label {
-        font-size: 3vw;
-        color: #00b4cc;
-    }
+        #jam {
+            font-size: 3.5rem;
+            font-weight: bold;
+            display: block;
+        }
 
-    .time {
-        font-size: 4.5vw;
-        margin-top: 5px;
-    }
+        #tanggal {
+            font-size: 1.2rem;
+        }
 
-    #alert {
-        margin-top: 15px;
-        font-size: 7vw;
-        font-weight: bold;
-        color: yellow;
-    }
-</style>
+        /* MAIN AREA */
+        .container {
+            flex: 1;
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
 
+        .sidebar {
+            width: 350px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .card-header {
+            background: #2e7d32;
+            padding: 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .card-body {
+            padding: 15px;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            font-size: 1rem;
+        }
+
+        .total {
+            border-top: 1px solid #ffd700;
+            padding-top: 5px;
+            color: #ffd700;
+            font-weight: bold;
+        }
+
+        /* JADWAL SHALAT (BAWAH) */
+        .footer-jadwal {
+            background: rgba(0, 0, 0, 0.8);
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            padding: 10px 0;
+            border-top: 4px solid #2e7d32;
+        }
+
+        .sholat-item {
+            text-align: center;
+            border-right: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sholat-item:last-child { border: none; }
+
+        .sholat-name {
+            font-size: 1.2rem;
+            color: #ffd700;
+            display: block;
+        }
+
+        .sholat-time {
+            font-size: 2rem;
+            font-weight: bold;
+        }
+
+        /* RUNNING TEXT */
+        .running-text {
+            background: #2e7d32;
+            color: white;
+            padding: 10px 0;
+            font-size: 1.2rem;
+        }
+
+        marquee {
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-<div id="title">MASJID DARUSSALAM</div>
-<div id="clock">00:00:00</div>
 
+    <header>
+        <div class="masjid-info">
+            <h1>MASJID DARUSSALAM</h1>
+            <p>PERUM JATISAWIT ASRI,JITENGAN,BALECATUR,GAMPING,SLEMAN</p>
+        </div>
+        <div class="clock-container">
+            <span id="jam">00:00:00</span>
+            <span id="tanggal">Senin, 01 Januari 2024</span>
+        </div>
+    </header>
 
-<div id="prayer-box">
-    <div class="item">
-        <div class="label">Subuh</div>
-        <div class="time" id="subuh">--:--</div>
+    <div class="container">
+        <aside class="sidebar">
+            <div class="card">
+                <div class="card-header">SALDO KAS MASJID</div>
+                <div class="card-body">
+                    <div class="row"><span>SALDO AWAL</span><span>15.000.000</span></div>
+                    <div class="row"><span>PEMASUKAN</span><span>1.000.000</span></div>
+                    <div class="row"><span>PENGELUARAN</span><span>500.000</span></div>
+                    <div class="row total"><span>SALDO AKHIR</span><span>15.500.000</span></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">PETUGAS JUM'AT</div>
+                <div class="card-body">
+                    <div class="row"><span>IMAM</span><span>UST.LUKMAN JOHAN</span></div>
+                    <div class="row"><span>KHATIB</span><span>UST.LUKMAN JOHAN</span></div>
+                    <div class="row"><span>MUADZIN</span><span>UST JATMIKO</span></div>
+                </div>
+            </div>
+        </aside>
+
+        </div>
+
+    <div class="footer-jadwal">
+        <div class="sholat-item">
+            <span class="sholat-name">SUBUH</span>
+            <span class="sholat-time">04:35</span>
+        </div>
+        <div class="sholat-item">
+            <span class="sholat-name">DZUHUR</span>
+            <span class="sholat-time">12:05</span>
+        </div>
+        <div class="sholat-item">
+            <span class="sholat-name">ASHAR</span>
+            <span class="sholat-time">15:15</span>
+        </div>
+        <div class="sholat-item">
+            <span class="sholat-name">MAGHRIB</span>
+            <span class="sholat-time">18:10</span>
+        </div>
+        <div class="sholat-item">
+            <span class="sholat-name">ISYA</span>
+            <span class="sholat-time">19:20</span>
+        </div>
+        <div class="sholat-item">
+            <span class="sholat-name">SYURUQ</span>
+            <span class="sholat-time">05:55</span>
+        </div>
     </div>
-    <div class="item">
-        <div class="label">Dzuhur</div>
-        <div class="time" id="dzuhur">--:--</div>
+
+    <div class="running-text">
+        <marquee behavior="scroll" direction="left">
+            "Barangsiapa yang membangun masjid karena Allah, maka Allah akan membangunkan baginya rumah di surga." (HR. Bukhari & Muslim) — Jagalah kebersihan Masjid kita — Matikan Handphone saat berada di dalam Masjid — Luruskan Shaf sebelum Shalat dimulai.
+        </marquee>
     </div>
-    <div class="item">
-        <div class="label">Ashar</div>
-        <div class="time" id="ashar">--:--</div>
-    </div>
-    <div class="item">
-        <div class="label">Maghrib</div>
-        <div class="time" id="maghrib">--:--</div>
-    </div>
-    <div class="item">
-        <div class="label">Isya</div>
-        <div class="time" id="isya">--:--</div>
-    </div>
-</div>
 
-<div id="alert"></div>
+    <script>
+        function updateClock() {
+            const now = new Date();
+            
+            // Jam
+            const h = String(now.getHours()).padStart(2, '0');
+            const m = String(now.getMinutes()).padStart(2, '0');
+            const s = String(now.getSeconds()).padStart(2, '0');
+            document.getElementById('jam').innerText = `${h}:${m}:${s}`;
 
-<audio id="beep">
-    <source src="https://assets.mixkit.co/sfx/preview/mixkit-alarm-digital-clock-beep-989.mp3" type="audio/mpeg">
-</audio>
-
-<script>
-    // JAM DIGITAL
-    function updateClock() {
-        let now = new Date();
-        let h = String(now.getHours()).padStart(2, '0');
-        let m = String(now.getMinutes()).padStart(2, '0');
-        let s = String(now.getSeconds()).padStart(2, '0');
-
-        document.getElementById("clock").textContent = `${h}:${m}:${s}`;
-
-        checkAdzan(`${h}:${m}`);
-    }
-    setInterval(updateClock, 1000);
-
-
-    // JADWAL SHOLAT
-    let prayerTimes = {};
-    let alarmPlayedToday = {};  // Supaya alarm tidak bunyi berkali-kali
-    let iqomahTimer = null;
-
-    fetch("https://api.aladhan.com/v1/timingsByAddress?address=Gamping,Sleman,Indonesia")
-        .then(res => res.json())
-        .then(data => {
-
-            prayerTimes = {
-                Subuh: data.data.timings.Fajr.substring(0,5),
-                Dzuhur: data.data.timings.Dhuhr.substring(0,5),
-                Ashar: data.data.timings.Asr.substring(0,5),
-                Maghrib: data.data.timings.Maghrib.substring(0,5),
-                Isya: data.data.timings.Isha.substring(0,5)
-            };
-
-            document.getElementById("subuh").textContent = prayerTimes.Subuh;
-            document.getElementById("dzuhur").textContent = prayerTimes.Dzuhur;
-            document.getElementById("ashar").textContent = prayerTimes.Ashar;
-            document.getElementById("maghrib").textContent = prayerTimes.Maghrib;
-            document.getElementById("isya").textContent = prayerTimes.Isya;
-        });
-
-
-    // ==============================
-    // CEK WAKTU SHOLAT
-    // ==============================
-    function checkAdzan(currentTime) {
-        for (let key in prayerTimes) {
-
-            if (currentTime === prayerTimes[key] && !alarmPlayedToday[key]) {
-                alarmPlayedToday[key] = true;
-
-                playBeep5x();
-                showAdzanText();
-                startIqomahCountdown();
-            }
+            // Tanggal
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('tanggal').innerText = now.toLocaleDateString('id-ID', options);
         }
-    }
 
-
-    // ==============================
-    // ALARM BEEP 5x
-    // ==============================
-    function playBeep5x() {
-        let audio = document.getElementById("beep");
-        let count = 0;
-
-        let interval = setInterval(() => {
-            audio.currentTime = 0;
-            audio.play();
-            count++;
-
-            if (count >= 5) {
-                clearInterval(interval);
-            }
-        }, 1000);
-    }
-
-
-    // ==============================
-    // TAMPILKAN SAATNYA ADZAN
-    // ==============================
-    function showAdzanText() {
-        document.getElementById("alert").textContent = "SAATNYA ADZAN";
-        setTimeout(() => {
-            document.getElementById("alert").textContent = "";
-        }, 7000);
-    }
-
-
-    // ==============================
-    // HITUNG MUNDUR IQOMAH 15 MENIT
-    // ==============================
-    function startIqomahCountdown() {
-        let totalSeconds = 15 * 60;
-
-        clearInterval(iqomahTimer);
-
-        iqomahTimer = setInterval(() => {
-            totalSeconds--;
-
-            if (totalSeconds <= 0) {
-                document.getElementById("alert").textContent = "IQOMAH";
-                clearInterval(iqomahTimer);
-                return;
-            }
-
-            let m = Math.floor(totalSeconds / 60);
-            let s = totalSeconds % 60;
-
-            document.getElementById("alert").textContent =
-                `IQOMAH ${m}:${String(s).padStart(2, '0')}`;
-
-        }, 1000);
-    }
-</script>
-
+        setInterval(updateClock, 1000);
+        updateClock();
+    </script>
 </body>
 </html>
-
-
-
-
-
