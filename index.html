@@ -9,40 +9,44 @@
         
         body {
             height: 100vh; width: 100vw;
-            background-image: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.4)), url('bg-masjid.jpg');
+            background-image: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.2)), url('bg-masjid.jpg');
             background-size: cover; background-position: center; color: white;
-            display: flex; flex-direction: column; overflow: hidden; padding: 20px;
+            display: flex; flex-direction: column; overflow: hidden;
+            /* SAFE ZONE: Mencegah tampilan terpotong di layar TV */
+            padding: 40px; 
         }
 
-        /* 1. JUDUL CENTER TENGAH ATAS */
+        /* 1. HEADER (TENGAH) DENGAN BACKGROUND TRANSPARAN */
         .header-center {
             text-align: center;
-            margin-bottom: 20px;
+            background: rgba(0, 0, 0, 0.6); /* Hitam Transparan */
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
         }
         .header-center h1 {
-            font-size: 4.5rem; /* Ukuran Besar */
+            font-size: 4.5rem;
             color: #ffd700;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.9);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            margin-bottom: 5px;
         }
-        .header-center p {
-            font-size: 1.5rem; /* Ukuran Kecil */
-            letter-spacing: 2px;
-        }
+        .header-center p { font-size: 1.4rem; color: #fff; letter-spacing: 1px; }
 
         .main-content {
             flex: 1;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 0 20px;
+            gap: 40px;
         }
 
-        /* 2. KAS & PETUGAS (SISI KIRI) */
+        /* 2. SIDEBAR KIRI (KAS & PETUGAS) */
         .sidebar-left {
-            width: 40%;
+            width: 38%;
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 25px;
         }
         .card {
             background: rgba(0, 0, 0, 0.7);
@@ -55,29 +59,30 @@
             padding: 15px;
             text-align: center;
             font-weight: bold;
-            font-size: 1.8rem; /* Font Diperbesar */
+            font-size: 1.8rem;
             color: #ffd700;
         }
         .card-body { padding: 20px; }
-        .row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 1.6rem; } /* Font Diperbesar */
+        .row { display: flex; justify-content: space-between; margin-bottom: 12px; font-size: 1.6rem; }
         .total { border-top: 2px solid #ffd700; padding-top: 10px; color: #ffd700; font-weight: bold; font-size: 1.9rem; }
 
-        /* 5. JAM BESAR (SISI KANAN) */
+        /* 5. JAM BESAR (KANAN) DENGAN BACKGROUND TRANSPARAN */
         .clock-section {
-            background: rgba(0, 0, 0, 0.8); /* Background Transparan Hitam */
-            padding: 40px;
+            background: rgba(0, 0, 0, 0.7); /* Hitam Transparan */
+            padding: 50px;
             border-radius: 20px;
             text-align: center;
-            border: 1px solid rgba(255,255,255,0.2);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            width: 55%;
         }
         #jam {
-            font-size: 9rem; /* Ukuran Sangat Besar */
+            font-size: 9.5rem;
             font-weight: bold;
             color: white;
             line-height: 1;
         }
-        #tanggal-masehi { font-size: 2.2rem; color: #ffd700; margin-top: 10px; }
-        #tanggal-hijriah { font-size: 1.8rem; color: #00ff00; }
+        #tanggal-masehi { font-size: 2.2rem; color: #ffd700; margin-top: 15px; }
+        #tanggal-hijriah { font-size: 2rem; color: #00ff00; font-weight: bold; margin-top: 5px; }
 
         /* 3. JADWAL SHOLAT (BAWAH) */
         .footer-jadwal {
@@ -86,17 +91,20 @@
             grid-template-columns: repeat(6, 1fr);
             padding: 15px 0;
             border-top: 5px solid #2e7d32;
-            margin-top: 20px;
+            margin-top: 30px;
+            border-radius: 10px;
         }
         .sholat-item { text-align: center; border-right: 1px solid rgba(255,255,255,0.1); }
         .sholat-name { font-size: 1.6rem; color: #ffd700; font-weight: bold; }
-        .sholat-time { font-size: 3.5rem; font-weight: bold; display: block; } /* Ukuran Besar */
+        .sholat-time { font-size: 3.5rem; font-weight: bold; display: block; }
 
         /* 4. RUNNING TEXT */
         .running-text {
             background: #2e7d32;
-            padding: 10px 0;
+            padding: 12px 0;
             font-size: 1.8rem;
+            margin-top: 15px;
+            border-radius: 5px;
         }
 
         #layar-iqomah {
@@ -134,8 +142,8 @@
 
         <div class="clock-section">
             <div id="jam">00:00:00</div>
-            <div id="tanggal-masehi">Senin, 02 Maret 2026</div>
-            <div id="tanggal-hijriah">13 Ramadhan 1447 H</div>
+            <div id="tanggal-masehi">Memuat...</div>
+            <div id="tanggal-hijriah">Memuat Hijriah...</div>
         </div>
     </div>
 
@@ -162,25 +170,6 @@
         let isIqomah = false;
         let audioCtx = null;
 
-        function initAudio() {
-            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            if (audioCtx.state === 'suspended') audioCtx.resume();
-        }
-
-        function playBuzzer(count) {
-            initAudio();
-            for (let i = 0; i < count; i++) {
-                setTimeout(() => {
-                    let osc = audioCtx.createOscillator();
-                    let gain = audioCtx.createGain();
-                    osc.type = "square"; osc.frequency.value = 900;
-                    osc.connect(gain); gain.connect(audioCtx.destination);
-                    osc.start(); gain.gain.exponentialRampToValueAtTime(0.00001, audioCtx.currentTime + 0.6);
-                    osc.stop(audioCtx.currentTime + 0.6);
-                }, i * 800);
-            }
-        }
-
         function updateClock() {
             const now = new Date();
             const jamMenit = now.getHours().toString().padStart(2, '0') + ":" + now.getMinutes().toString().padStart(2, '0');
@@ -188,14 +177,15 @@
             document.getElementById('jam').innerText = now.toLocaleTimeString('id-ID');
             document.getElementById('tanggal-masehi').innerText = now.toLocaleDateString('id-ID', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
             
-            // Hitung Tanggal Hijriah (Estimasi Sederhana)
-            const hijriOptions = { day: 'numeric', month: 'long', year: 'numeric' };
-            document.getElementById('tanggal-hijriah').innerText = new Intl.DateTimeFormat('id-TN-u-ca-islamic-uma', hijriOptions).format(now) + " H";
+            // Perbaikan Tanggal Hijriah (API Aladhan untuk akurasi tinggi)
+            if (jadwalGlobal.date) {
+                document.getElementById('tanggal-hijriah').innerText = 
+                    `${jadwalGlobal.date.hijri.day} ${jadwalGlobal.date.hijri.month.en} ${jadwalGlobal.date.hijri.year} H`;
+            }
 
             const daftarSholat = ['Fajr', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
             daftarSholat.forEach(sholat => {
-                if (jadwalGlobal[sholat] === jamMenit && !isIqomah) {
-                    playBuzzer(3);
+                if (jadwalGlobal.timings && jadwalGlobal.timings[sholat] === jamMenit && !isIqomah) {
                     mulaiIqomah(sholat);
                 }
             });
@@ -207,13 +197,16 @@
             try {
                 const res = await fetch(`https://api.aladhan.com/v1/timings/${now.getDate()}-${now.getMonth()+1}-${now.getFullYear()}?latitude=${lat}&longitude=${lng}&method=20`);
                 const data = await res.json();
-                jadwalGlobal = data.data.timings;
-                document.getElementById('sh-Fajr').innerText = jadwalGlobal.Fajr;
-                document.getElementById('sh-Dhuhr').innerText = jadwalGlobal.Dhuhr;
-                document.getElementById('sh-Asr').innerText = jadwalGlobal.Asr;
-                document.getElementById('sh-Maghrib').innerText = jadwalGlobal.Maghrib;
-                document.getElementById('sh-Isha').innerText = jadwalGlobal.Isha;
-                document.getElementById('sh-Sunrise').innerText = jadwalGlobal.Sunrise;
+                jadwalGlobal = data.data; // Menyimpan seluruh data termasuk tanggal Hijriah
+                
+                const t = jadwalGlobal.timings;
+                document.getElementById('sh-Fajr').innerText = t.Fajr;
+                document.getElementById('sh-Dhuhr').innerText = t.Dhuhr;
+                document.getElementById('sh-Asr').innerText = t.Asr;
+                document.getElementById('sh-Maghrib').innerText = t.Maghrib;
+                document.getElementById('sh-Isha').innerText = t.Isha;
+                document.getElementById('sh-Sunrise').innerText = t.Sunrise;
+                updateClock();
             } catch (err) { console.log("Gagal muat jadwal"); }
         }
 
@@ -227,13 +220,11 @@
                 durasi--;
                 let m = Math.floor(durasi / 60); let s = durasi % 60;
                 display.innerText = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
-                if (durasi === 10) playBuzzer(3);
                 if (durasi <= 0) { clearInterval(timer); overlay.style.display = 'none'; isIqomah = false; }
             }, 1000);
         }
 
         window.addEventListener('load', () => { getJadwalSholat(); setInterval(updateClock, 1000); });
-        window.addEventListener('mousedown', initAudio);
     </script>
 </body>
 </html>
