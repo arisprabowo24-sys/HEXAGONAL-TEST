@@ -14,6 +14,7 @@
 
         body {
             height: 100vh;
+            /* Pastikan nama file gambar di GitHub sesuai (bg-masjid.jpg atau MASJID DARUSSALAM.jpg) */
             background-image: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url('bg-masjid.jpg');
             background-size: cover;
             background-position: center;
@@ -136,8 +137,11 @@
             font-size: 1.2rem;
         }
 
-        marquee {
-            width: 100%;
+        /* TAMPILAN IQOMAH (OVERLAY) */
+        #layar-iqomah {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: #000; z-index: 10000; display: none;
+            flex-direction: column; align-items: center; justify-content: center; text-align: center;
         }
     </style>
 </head>
@@ -146,11 +150,11 @@
     <header>
         <div class="masjid-info">
             <h1>MASJID DARUSSALAM</h1>
-            <p>PERUM JATISAWIT ASRI,JITENGAN,BALECATUR,GAMPING,SLEMAN</p>
+            <p>PERUM JATISAWIT ASRI, JITENGAN, BALECATUR, GAMPING, SLEMAN</p>
         </div>
         <div class="clock-container">
             <span id="jam">00:00:00</span>
-            <span id="tanggal">Senin, 01 Januari 2024</span>
+            <span id="tanggal">...</span>
         </div>
     </header>
 
@@ -169,66 +173,16 @@
             <div class="card">
                 <div class="card-header">PETUGAS JUM'AT</div>
                 <div class="card-body">
-                    <div class="row"><span>IMAM</span><span>UST.LUKMAN JOHAN</span></div>
-                    <div class="row"><span>KHATIB</span><span>UST.LUKMAN JOHAN</span></div>
+                    <div class="row"><span>IMAM</span><span>UST. LUKMAN JOHAN</span></div>
+                    <div class="row"><span>KHATIB</span><span>UST. LUKMAN JOHAN</span></div>
                     <div class="row"><span>MUADZIN</span><span>UST JATMIKO</span></div>
                 </div>
             </div>
         </aside>
-
-        </div>
+    </div>
 
     <div class="footer-jadwal">
-        <div class="sholat-item">
-            <span class="sholat-name">SUBUH</span>
-            <span class="sholat-time">04:35</span>
-        </div>
-        <div class="sholat-item">
-            <span class="sholat-name">DZUHUR</span>
-            <span class="sholat-time">12:05</span>
-        </div>
-        <div class="sholat-item">
-            <span class="sholat-name">ASHAR</span>
-            <span class="sholat-time">15:15</span>
-        </div>
-        <div class="sholat-item">
-            <span class="sholat-name">MAGHRIB</span>
-            <span class="sholat-time">18:10</span>
-        </div>
-        <div class="sholat-item">
-            <span class="sholat-name">ISYA</span>
-            <span class="sholat-time">19:20</span>
-        </div>
-        <div class="sholat-item">
-            <span class="sholat-name">SYURUQ</span>
-            <span class="sholat-time">05:55</span>
-        </div>
-    </div>
-
-    <div class="running-text">
-        <marquee behavior="scroll" direction="left">
-            "Barangsiapa yang membangun masjid karena Allah, maka Allah akan membangunkan baginya rumah di surga." (HR. Bukhari & Muslim) — Jagalah kebersihan Masjid kita — Matikan Handphone saat berada di dalam Masjid — Luruskan Shaf sebelum Shalat dimulai.
-        </marquee>
-    </div>
-
-    <script>
-        function updateClock() {
-            const now = new Date();
-            
-            // Jam
-            const h = String(now.getHours()).padStart(2, '0');
-            const m = String(now.getMinutes()).padStart(2, '0');
-            const s = String(now.getSeconds()).padStart(2, '0');
-            document.getElementById('jam').innerText = `${h}:${m}:${s}`;
-
-            // Tanggal
-            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-            document.getElementById('tanggal').innerText = now.toLocaleDateString('id-ID', options);
-        }
-
-        setInterval(updateClock, 1000);
-        updateClock();
-    </script>
-</body>
-</html>
-
+        <div class="sholat-item"><span class="sholat-name">SUBUH</span><span class="sholat-time" id="sh-Fajr">--:--</span></div>
+        <div class="sholat-item"><span class="sholat-name">DZUHUR</span><span class="sholat-time" id="sh-Dhuhr">--:--</span></div>
+        <div class="sholat-item"><span class="sholat-name">ASHAR</span><span class="sholat-time" id="sh-Asr">--:--</span></div>
+        <div class="sholat-item"><span class="sholat-name">MAGHRIB</span><span class="sholat-time" id
