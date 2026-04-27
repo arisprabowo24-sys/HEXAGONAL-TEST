@@ -157,6 +157,48 @@
         let dataLog = [];
         let isRunning = false;
 
+        // Konfigurasi Firebase
+const firebaseConfig = {
+  databaseURL: "https://hexagonal-test-default-rtdb.firebaseio.com/"
+};
+
+// Inisialisasi Firebase
+firebase.initializeApp(firebaseConfig);
+const database = firebase.database();
+
+// Fungsi bicara untuk HP
+function speak(teks) {
+    const u = new SpeechSynthesisUtterance(teks);
+    u.lang = 'id-ID';
+    window.speechSynthesis.speak(u);
+}
+
+// Ubah fungsi startSimulasi Anda menjadi seperti ini:
+function startSimulasi() {
+    const nama = document.getElementById('nama-atlet').value;
+    if(!nama) return alert("Isi nama atlet dulu!");
+    
+    speak("Alat siap, silakan lompat");
+    
+    // Kirim sinyal READY ke ESP32 lewat Firebase
+    database.ref('status').set("READY");
+    database.ref('nama_atlet').set(nama);
+    
+    resetDisplay();
+}
+
+// Mendengarkan update dari ESP32 secara real-time
+database.ref('last_record').on('value', (snapshot) => {
+    const data = snapshot.val();
+    if(data) {
+        document.getElementById('sw' + data.sensor_ke).innerText = data.waktu;
+        
+        if(data.sensor_ke == 6) {
+            speak("Selesai. Waktu Anda " + data.waktu + " detik");
+            document.getElementById('btn-save').style.display = "block";
+        }
+    }
+});
         function startSimulasi() {
             const nama = document.getElementById('nama-atlet').value;
             if(!nama) return alert("Harap isi nama atlet terlebih dahulu!");
