@@ -1,64 +1,139 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Koneksi Web Bluetooth ESP32</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 20px; text-align: center; }
-    button { padding: 10px 20px; font-size: 16px; cursor: pointer; background-color: #007bff; color: white; border: none; border-radius: 5px; }
-    button:hover { background-color: #0056b3; }
-    #log { margin-top: 20px; padding: 10px; background-color: #f4f4f4; text-align: left; display: inline-block; width: 80%; min-height: 100px; border: 1px solid #ddd; }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ESP32 Web Bluetooth Monitor</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+        }
+        h2 {
+            margin-top: 0;
+            color: #2c3e50;
+        }
+        button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 20px;
+        }
+        button:hover {
+            background-color: #2980b9;
+        }
+        .status-box {
+            margin: 15px 0;
+            padding: 10px;
+            border-radius: 6px;
+            font-weight: 500;
+            background-color: #e8f4f8;
+            color: #2980b9;
+        }
+        .data-box {
+            margin-top: 20px;
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e9ecef;
+        }
+        .data-value {
+            font-size: 28px;
+            font-weight: bold;
+            color: #27ae60;
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-  <h2>Uji Koneksi Web Bluetooth ESP32</h2>
-  <button onclick="connectBLE()">Hubungkan ke ESP32</button>
-  
-  <p id="status">Status: Terputus</p>
-  <div id="log">Tekan tombol di atas untuk memulai koneksi...</div>
 
-  <script>
-    const SERVICE_UUID = "4fafc201-1fb5-459e-8fcc-c5c9c331914b";
-    const CHARACTERISTIC_UUID = "beb5483e-36e1-4688-b7f5-ea07361b26a7";
-
-    async function connectBLE() {
-      const statusText = document.getElementById("status");
-      const logText = document.getElementById("log");
-
-      try {
-        statusText.innerText = "Status: Memindai perangkat...";
-        logText.innerText = "Membuka antarmuka Bluetooth...";
-
-        const device = await navigator.bluetooth.requestDevice({
-          filters: [{ services: [SERVICE_UUID] }]
-        });
-
-        statusText.innerText = "Status: Menghubungkan ke " + device.name + "...";
-        const server = await device.gatt.connect();
+    <div class="container">
+        <h2>Dashboard ESP32</h2>
+        <button onclick="connectBLE()">Hubungkan ke ESP32</button>
         
-        const service = await server.getPrimaryService(SERVICE_UUID);
-        const characteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
+        <div class="status-box" id="statusText">Status: Terputus</div>
+        
+        <div class="data-box">
+            <label>Data Diterima:</label>
+            <div class="data-value" id="dataOutput">-</div>
+        </div>
+    </div>
 
-        statusText.innerText = "Status: Terhubung";
-        logText.innerText = "Berhasil tersambung ke perangkat BLE!";
+    <script>
+        // Masukkan UUID yang sesuai dengan kodingan ESP32 Anda
+        const SERVICE_UUID = '4fafc201-1fb5-459e-8fcc-c5c9c331914b';
+        const CHARACTERISTIC_UUID = 'beb5483e-36e1-4688-b7f5-ea07361b26a7';
+        
+        let device;
+        let characteristic;
 
-        const value = await characteristic.readValue();
-        let decoder = new TextDecoder('utf-8');
-        logText.innerText += "\nData diterima: " + decoder.decode(value);
+        async function connectBLE() {
+            try {
+                document.getElementById('statusText').innerText = "Mencari perangkat...";
+                
+                // Melakukan koneksi ke ESP32 berdasarkan namanya
+                device = await navigator.bluetooth.requestDevice({
+                    filters: [{ name: 'ESP32-Device' }],
+                    optionalServices: [SERVICE_UUID]
+                });
 
-        await characteristic.startNotifications();
-        characteristic.addEventListener('characteristicvaluechanged', (event) => {
-          let val = event.target.value;
-          logText.innerText += "\nNotifikasi: " + decoder.decode(val);
-        });
+                document.getElementById('statusText').innerText = "Menghubungkan ke GATT Server...";
+                
+                // Menghubungkan ke server GATT
+                const server = await device.gatt.connect();
+                
+                document.getElementById('statusText').innerText = "Mengakses Layanan...";
+                const service = await server.getPrimaryService(SERVICE_UUID);
+                
+                document.getElementById('statusText').innerText = "Membaca Karakteristik...";
+                characteristic = await service.getCharacteristic(CHARACTERISTIC_UUID);
 
-      } catch(error) {
-        statusText.innerText = "Status: Gagal / Dibatalkan";
-        logText.innerText = "Error: " + error;
-        console.error(error);
-      }
-    }
-  </script>
+                document.getElementById('statusText').innerText = "Terhubung!";
+                
+                // Membaca data awal
+                const value = await characteristic.readValue();
+                const decoder = new TextDecoder('utf-8');
+                document.getElementById('dataOutput').innerText = decoder.decode(value);
+
+                // Mengaktifkan event saat terjadi update data
+                await characteristic.startNotifications();
+                characteristic.addEventListener('characteristicvaluechanged', (event) => {
+                    const receivedValue = event.target.value;
+                    const dec = new TextDecoder('utf-8');
+                    document.getElementById('dataOutput').innerText = dec.decode(receivedValue);
+                });
+
+                // Menangani jika perangkat terputus
+                device.addEventListener('gattserverdisconnected', () => {
+                    document.getElementById('statusText').innerText = "Status: Terputus";
+                    document.getElementById('dataOutput').innerText = "-";
+                });
+
+            } catch(error) {
+                console.error("Gagal terhubung:", error);
+                document.getElementById('statusText').innerText = "Koneksi Gagal: " + error.message;
+            }
+        }
+    </script>
 </body>
 </html>
